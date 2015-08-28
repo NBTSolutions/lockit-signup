@@ -157,7 +157,7 @@ Signup.prototype.postSignup = function(req, res, next) {
           if (takenErr) {return next(takenErr); }
 
           // send only JSON when REST is active
-          if (config.rest) {return res.send(204); }
+          if (config.rest) {return res.send(400); }
 
           res.render(successView, {
             title: 'Sign up - Email sent',
