@@ -182,7 +182,7 @@ Signup.prototype.postSignup = function(req, res, next) {
           that.emit('signup::post::' + savedUser.name, savedUser);
 
           // send only JSON when REST is active
-          if (config.rest) {return res.send(204); }
+          if (config.rest) {return res.status(200).json({ uid: savedUser._id }); }
 
           res.render(successView, {
             title: 'Sign up - Email sent',
