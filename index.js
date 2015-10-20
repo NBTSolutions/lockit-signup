@@ -172,14 +172,14 @@ Signup.prototype.postSignup = function(req, res, next) {
       // save new user to db
       adapter.save(name, email, password, function(saveErr, savedUser) {
         if (saveErr) {return next(saveErr); }
-
+        // emit event
+        // used to emit after successful send of email, but verifying the sending of the email
+        // is unnecessary for this process.
+        that.emit('signup::post::' + savedUser.name, savedUser);
         // send email with link for address verification
         var m = new Mail(config);
         m.signup(savedUser.name, savedUser.email, savedUser.signupToken, function(signupErr) {
           if (signupErr) {return next(signupErr); }
-
-          // emit event
-          that.emit('signup::post::' + savedUser.name, savedUser);
 
           // send only JSON when REST is active
           if (config.rest) {return res.status(200).json({ uid: savedUser._id }); }
